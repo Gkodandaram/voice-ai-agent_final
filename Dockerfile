@@ -9,16 +9,14 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip first
-RUN pip install --upgrade pip
+# Upgrade pip and install build tools
+RUN pip install --upgrade pip setuptools wheel
 
-# Install packages in stages to avoid conflicts
-RUN pip install --no-cache-dir numpy==1.26.4
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
-
-# Copy requirements and install rest
+# Copy requirements first (before installing)
 COPY requirements.txt .
+
+# Install packages
+RUN pip install --no-cache-dir numpy==1.26.4
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
