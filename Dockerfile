@@ -2,25 +2,17 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies including audio libraries
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     gcc \
     g++ \
-    libsndfile1 \
-    libavcodec-dev \
-    libavformat-dev \
-    libavutil-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and build tools
 RUN pip install --upgrade pip setuptools wheel
 
-# Copy and install requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
 EXPOSE 8000
